@@ -4,16 +4,14 @@
   "description": "Secure auth + session intelligence backend (Node/Express/Prisma)",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "npx prisma generate && tsc",
-    "start": "node dist/src/server.js",
-    "postinstall": "npx prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:migrate:deploy": "prisma migrate deploy",
-    "prisma:generate": "prisma generate",
-    "prisma:seed": "prisma db seed",
-    "lint": "echo \"No linter configured for backend\"",
-    "test": "echo \"No tests configured\" && exit 0"
+  "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+  "build": "npx prisma generate && tsc",
+  "start": "node dist/src/server.js",
+  "db:setup": "npx prisma migrate deploy && npx prisma generate && npx prisma db seed",
+  "db:migrate": "npx prisma migrate dev",
+  "postinstall": "npx prisma generate",
+  "lint": "echo \"No linter configured for backend\"",
+  "test": "echo \"No tests configured\" && exit 0"
   },
   "keywords": [
     "auth",
