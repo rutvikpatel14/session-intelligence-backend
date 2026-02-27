@@ -12,9 +12,9 @@ export function generateCsrfToken(): string {
 
 export function setCsrfCookie(res: Response, token: string) {
   res.cookie(CSRF_COOKIE_NAME, token, {
-    httpOnly: false, // must be readable by browser JavaScript to send header
-    sameSite: "strict",
-    secure: isProduction,
+    httpOnly: true, // must be readable by browser JavaScript to send header
+    secure: true, // REQUIRED in production
+    sameSite: "none",
     path: "/",
   });
 }

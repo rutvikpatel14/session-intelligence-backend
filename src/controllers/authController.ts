@@ -103,11 +103,11 @@ export const authController = {
       res.clearCookie(REFRESH_COOKIE_NAME, {
         httpOnly: true,
         secure: isProduction,
-        sameSite: "strict",
+        sameSite: "none",
         path: "/",
       });
       res.clearCookie("csrfToken", {
-        httpOnly: false,
+        httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? "none" : "strict",
         path: "/",
