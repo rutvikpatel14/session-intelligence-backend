@@ -8,7 +8,7 @@ const router = Router();
 
 router.post("/register", authController.register);
 router.post("/login", loginRateLimiter, authController.login);
-router.post("/refresh", csrfProtection, authController.refresh);
+router.post("/refresh",  authController.refresh);
 router.post("/logout", csrfProtection, authenticate, authController.logout);
 router.post("/verify-session", authenticate, authController.verifySession);
 
