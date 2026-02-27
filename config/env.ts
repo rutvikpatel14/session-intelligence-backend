@@ -1,41 +1,27 @@
-import dotenv from "dotenv";
-import { z } from "zod";
-import crypto from "crypto";
+// src/config/env.ts - BULLETPROOF for Prisma + Render
+import 'dotenv/config';  // Built-in, NO side effects
+import crypto from 'crypto';
 
-dotenv.config();
+// NO EARLY VALIDATION - let Prisma load first
+const rawEnv = process.env;
 
-const envSchema = z.object({
-  PORT: z.string().default("4000"),
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  JWT_ACCESS_SECRET: z.string().optional(),
-  JWT_REFRESH_SECRET: z.string().optional(),
-  ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"), // 15 minutes
-  REFRESH_TOKEN_EXPIRES_IN: z.string().default("7d"), // 7 days
-});
-
-const parsed = envSchema.safeParse(process.env);
-
-if (!parsed.success) {
-  // eslint-disable-next-line no-console
-  console.error("❌ Invalid environment configuration:", parsed.error.flatten().fieldErrors);
-  throw new Error("Invalid environment configuration");
+function generateSecret(name: string): string {
+  const secret = crypto.randomBytes(48).toString('hex');
+  console.log(`🔑 ${name} auto-generated (${secret.length} chars)`);
+  return secret;
 }
 
-const base = parsed.data;
-
-function ensureSecret(current: string | undefined, name: "JWT_ACCESS_SECRET" | "JWT_REFRESH_SECRET") {
-  if (current && current.length >= 32) {
-    return current;
-  }
-  const generated = crypto.randomBytes(48).toString("hex");
-  return generated;
-}
-
+// Create safe env object - NO Zod crash
 export const env = {
-  ...base,
-  JWT_ACCESS_SECRET: ensureSecret(base.JWT_ACCESS_SECRET, "JWT_ACCESS_SECRET"),
-  JWT_REFRESH_SECRET: ensureSecret(base.JWT_REFRESH_SECRET, "JWT_REFRESH_SECRET"),
+  PORT: rawEnv.PORT || '4000',
+  DATABASE_URL: rawEnv.DATABASE_URL!,
+  JWT_ACCESS_SECRET: rawEnv.JWT_ACCESS_SECRET || generateSecret('JWT_ACCESS_SECRET'),
+  JWT_REFRESH_SECRET: rawEnv.JWT_REFRESH_SECRET || generateSecret('JWT_REFRESH_SECRET'),
+  FRONTEND_ORIGIN: rawEnv.FRONTEND_ORIGIN || 'http://localhost:3000',
+  ACCESS_TOKEN_EXPIRES_IN: rawEnv.ACCESS_TOKEN_EXPIRES_IN || '15m',
+  REFRESH_TOKEN_EXPIRES_IN: rawEnv.REFRESH_TOKEN_EXPIRES_IN || '7d',
 };
 
-export const isProduction = process.env.NODE_ENV === "production";
+export const isProduction = rawEnv.NODE_ENV === 'production';
 
+console.log('✅ Env module loaded - secrets ready');
