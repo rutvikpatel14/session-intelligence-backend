@@ -10,7 +10,7 @@ function setAuthCookies(res: Response, refreshToken: string) {
   res.cookie(REFRESH_COOKIE_NAME, refreshToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: "strict",
+    sameSite: isProduction ? "none" : "strict",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
@@ -109,7 +109,7 @@ export const authController = {
       res.clearCookie("csrfToken", {
         httpOnly: false,
         secure: isProduction,
-        sameSite: "strict",
+        sameSite: isProduction ? "none" : "strict",
         path: "/",
       });
 
