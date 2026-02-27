@@ -4,9 +4,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { routes } from "./routes";
 import { errorHandler } from "./middlewares/errorHandler";
-import { env, isProduction } from "./config/env";
 
 const app = express();
+
+app.set('trust proxy', 1);
 
 app.use(
   helmet({
