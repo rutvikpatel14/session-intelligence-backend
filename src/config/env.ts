@@ -5,14 +5,12 @@ import crypto from "crypto";
 dotenv.config();
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.string().default("4000"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   JWT_ACCESS_SECRET: z.string().optional(),
   JWT_REFRESH_SECRET: z.string().optional(),
   ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"), // 15 minutes
   REFRESH_TOKEN_EXPIRES_IN: z.string().default("7d"), // 7 days
-  FRONTEND_ORIGIN: z.string().min(1, "FRONTEND_ORIGIN is required"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -43,5 +41,5 @@ export const env = {
   JWT_REFRESH_SECRET: ensureSecret(base.JWT_REFRESH_SECRET, "JWT_REFRESH_SECRET"),
 };
 
-export const isProduction = env.NODE_ENV === "production";
+export const isProduction = process.env.NODE_ENV === "production";
 

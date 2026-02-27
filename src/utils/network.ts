@@ -1,4 +1,5 @@
 import type { Request } from "express";
+import geoip from "geoip-lite";
 
 export function getClientIp(req: Request): string {
   const forwarded = (req.headers["x-forwarded-for"] as string | undefined)?.split(",")[0]?.trim();
@@ -13,15 +14,20 @@ export function getIpRange(ip: string): string {
   return ip;
 }
 
-// Mock country detection based on IP range
+// Country detection based on IP using geoip-lite with sensible fallbacks
 export function getCountryFromIp(ip: string): string {
+  const lookup = geoip.lookup(ip);
+  if (lookup?.country) {
+    return lookup.country;
+  }
+
   const range = getIpRange(ip);
 
   if (range.startsWith("10.")) return "US";
   if (range.startsWith("172.")) return "DE";
   if (range.startsWith("192.168.")) return "IN";
 
-  // Fallback mock
-  return "US";
+  // Fallback when no mapping is available
+  return "Unknown";
 }
 

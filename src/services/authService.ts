@@ -123,14 +123,6 @@ export const authService = {
       );
     }
 
-    if (existingSession.isSuspicious) {
-      throw new AppError(
-        "Session requires verification before continuing.",
-        403,
-        "SESSION_VERIFICATION_REQUIRED"
-      );
-    }
-
     const user = await userRepository.findById(existingSession.userId);
     if (!user) {
       await sessionRepository.deleteById(existingSession.id);
@@ -148,9 +140,6 @@ export const authService = {
     });
 
     const country = getCountryFromIp(ipAddress);
-
-    // Best-effort update of device / ip metadata
-    await sessionRepository.updateRefreshToken(existingSession.id, newRefreshHash, new Date());
     await sessionRepository.enforceMaxSessions(user.id, MAX_SESSIONS_PER_USER);
 
     return {

@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import crypto from "crypto";
 import { AppError } from "../utils/errors";
+import { isProduction } from "../config/env";
 
 const CSRF_COOKIE_NAME = "csrfToken";
 const CSRF_HEADER_NAME = "x-csrf-token";
@@ -13,7 +14,7 @@ export function setCsrfCookie(res: Response, token: string) {
   res.cookie(CSRF_COOKIE_NAME, token, {
     httpOnly: false, // must be readable by browser JavaScript to send header
     sameSite: "strict",
-    secure: true,
+    secure: isProduction,
     path: "/",
   });
 }

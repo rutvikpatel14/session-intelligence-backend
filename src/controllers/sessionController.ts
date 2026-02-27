@@ -25,8 +25,13 @@ export const sessionController = {
   deleteMySession: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user?.id as string;
+      const role = req.user?.role;
       const sessionId = String(req.params.id);
-      await sessionService.deleteUserSession(userId, sessionId);
+      if (role === "admin") {
+        await sessionService.adminDeleteSession(sessionId);
+      } else {
+        await sessionService.deleteUserSession(userId, sessionId);
+      }
       return res.status(200).json({ success: true });
     } catch (err) {
       return next(err);
