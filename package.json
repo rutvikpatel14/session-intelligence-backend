@@ -36,7 +36,8 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.19.0",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "prisma": "^7.4.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
@@ -45,7 +46,6 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/node": "^20.0.0",
-    "prisma": "^7.4.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.0"
