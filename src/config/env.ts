@@ -28,10 +28,6 @@ function ensureSecret(current: string | undefined, name: "JWT_ACCESS_SECRET" | "
     return current;
   }
   const generated = crypto.randomBytes(48).toString("hex");
-  // eslint-disable-next-line no-console
-  console.warn(
-    `⚠️ ${name} is not set or too short. Generated a temporary secret at runtime. Tokens will be invalidated on server restart.`
-  );
   return generated;
 }
 
