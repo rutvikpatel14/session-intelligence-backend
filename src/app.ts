@@ -17,10 +17,7 @@ app.use(
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://session-intelligence-frontend1.onrender.com"
-    ],
+    origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
     credentials: true,
   })
 );
